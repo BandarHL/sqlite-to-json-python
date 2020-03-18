@@ -7,36 +7,32 @@ def dict_factory(cursor, row):
         d[col[0]] = row[idx]
     return d
 
-# connect to the SQlite databases
-connection = sqlite3.connect("path/to/sqlite/db")
-connection.row_factory = dict_factory
- 
-cursor = connection.cursor()
+def ConvertDB(path):
+	# connect to the SQlite databases
+	connection = sqlite3.connect(path)
+	connection.row_factory = dict_factory
 
-# select all the tables from the database
-cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
-tables = cursor.fetchall()
-# for each of the bables , select all the records from the table
-for table_name in tables:
+	cursor = connection.cursor()
+
+	# select all the tables from the database
+	cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+	tables = cursor.fetchall()
+	# for each of the bables , select all the records from the table
+	for table_name in tables:
 		# table_name = table_name[0]
-		print table_name['name']
-		    
-
-		conn = sqlite3.connect("path/to/sqlite/db")
+		print(table_name['name'])
+		conn = sqlite3.connect(path)
 		conn.row_factory = dict_factory
-		 
 		cur1 = conn.cursor()
-		 
-		cur1.execute("SELECT * FROM "+table_name['name'])
-		 
-		# fetch all or one we'll go for all.
-		 
+		cur1.execute("SELECT * FROM " + table_name['name'])
 		results = cur1.fetchall()
-		 
-		print results
-
 		# generate and save JSON files with the table name for each of the database tables
-		with open(table_name['name']+'.json', 'a') as the_file:
-		    the_file.write(format(results).replace(" u'", "'").replace("'", "\""))
+		with open(table_name['name'] + '.json', 'a') as the_file:
+			the_file.write(format(results).replace(" u'", "'").replace("'", "\""))
+		print('Database successfully converted :)')
 
-connection.close()
+	connection.close()
+
+if __name__ == '__main__':
+	db = input('Enter your sqlite path: \n')
+	ConvertDB(db)
