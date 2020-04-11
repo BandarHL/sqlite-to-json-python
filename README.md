@@ -1,6 +1,3 @@
-# Why i fork this repo?
-- because i want to support python3 and make project more clean
-
 # Setup and Usage
 
 - Clone this repository
